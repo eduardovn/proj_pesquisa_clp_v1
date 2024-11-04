@@ -1,0 +1,378 @@
+[
+    {
+        "id": "ac3a54951f21f6e2",
+        "type": "tab",
+        "label": "Final1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "02f3d5ef0de916bf",
+        "type": "inject",
+        "z": "ac3a54951f21f6e2",
+        "name": "temp_leit_p_p",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "topic": "ns=3;s=\"CTU_PC_MET_P\".CV",
+        "payload": "{\"cv_value\":1}",
+        "payloadType": "json",
+        "x": 140,
+        "y": 360,
+        "wires": [
+            [
+                "39dd82f8123919bc",
+                "f4b0920954d6ede6"
+            ]
+        ]
+    },
+    {
+        "id": "4db1cdb6dc0a68d3",
+        "type": "inject",
+        "z": "ac3a54951f21f6e2",
+        "name": "temp_leit_p_m",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "topic": "ns=3;s=\"CTU_PC_MET_M\".CV",
+        "payload": "{\"cv_value\":1}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 400,
+        "wires": [
+            [
+                "39dd82f8123919bc",
+                "f4b0920954d6ede6"
+            ]
+        ]
+    },
+    {
+        "id": "33109d5404722969",
+        "type": "inject",
+        "z": "ac3a54951f21f6e2",
+        "name": "temp_leit_p_g",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "topic": "ns=3;s=\"CTU_PC_MET_G\".CV",
+        "payload": "{\"cv_value\":1}",
+        "payloadType": "json",
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "39dd82f8123919bc",
+                "f4b0920954d6ede6"
+            ]
+        ]
+    },
+    {
+        "id": "2e401339133fb507",
+        "type": "inject",
+        "z": "ac3a54951f21f6e2",
+        "name": "temp_leit_p_plast",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "topic": "ns=3;s=\"CTU_PC_PLAST\".CV",
+        "payload": "{\"cv_value\":1}",
+        "payloadType": "json",
+        "x": 130,
+        "y": 320,
+        "wires": [
+            [
+                "39dd82f8123919bc",
+                "f4b0920954d6ede6"
+            ]
+        ]
+    },
+    {
+        "id": "449130aa8b817019",
+        "type": "function",
+        "z": "ac3a54951f21f6e2",
+        "name": "Encapsular OPCUA em objeto",
+        "func": "msg.payload = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 380,
+        "wires": [
+            [
+                "d3995a0234c1a974"
+            ]
+        ]
+    },
+    {
+        "id": "39dd82f8123919bc",
+        "type": "OpcUa-Client",
+        "z": "ac3a54951f21f6e2",
+        "endpoint": "0298100053feb368",
+        "action": "read",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 10,
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "useTransport": false,
+        "maxChunkCount": 1,
+        "maxMessageSize": 8192,
+        "receiveBufferSize": 8192,
+        "sendBufferSize": 8192,
+        "name": "leitura_de_pecas",
+        "x": 390,
+        "y": 380,
+        "wires": [
+            [
+                "449130aa8b817019"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d3995a0234c1a974",
+        "type": "join",
+        "z": "ac3a54951f21f6e2",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "5",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 890,
+        "y": 420,
+        "wires": [
+            [
+                "0118c7e71ab8c9db"
+            ]
+        ]
+    },
+    {
+        "id": "0118c7e71ab8c9db",
+        "type": "function",
+        "z": "ac3a54951f21f6e2",
+        "name": "csv",
+        "func": "// Variáveis para armazenar os valores anteriores e o tempo\nvar previousData = context.get('previousData') || {\n    dateTime: null,\n    cv_ctu_pc_plast: null,\n    cv_ctu_pc_met_p: null,\n    cv_ctu_pc_met_m: null,\n    cv_ctu_pc_met_g: null\n};\n\nvar dateTime = msg.payload.dateTime;\nvar cv_ctu_pc_plast = msg.payload[\"ns=3;s=\\\"CTU_PC_PLAST\\\".CV\"];\nvar cv_ctu_pc_met_p = msg.payload[\"ns=3;s=\\\"CTU_PC_MET_P\\\".CV\"];\nvar cv_ctu_pc_met_m = msg.payload[\"ns=3;s=\\\"CTU_PC_MET_M\\\".CV\"];\nvar cv_ctu_pc_met_g = msg.payload[\"ns=3;s=\\\"CTU_PC_MET_G\\\".CV\"];\n\n// Condições para verificar se houve mudança nos valores\nif (\n    (cv_ctu_pc_plast !== previousData.cv_ctu_pc_plast && dateTime !== previousData.dateTime) ||\n    (cv_ctu_pc_met_p !== previousData.cv_ctu_pc_met_p && dateTime !== previousData.dateTime) ||\n    (cv_ctu_pc_met_m !== previousData.cv_ctu_pc_met_m && dateTime !== previousData.dateTime) ||\n    (cv_ctu_pc_met_g !== previousData.cv_ctu_pc_met_g && dateTime !== previousData.dateTime)\n) {\n    // Monta a linha de dados em formato CSV\n    var dataLine = dateTime + \",\" + cv_ctu_pc_plast + \",\" + cv_ctu_pc_met_p + \",\" + cv_ctu_pc_met_m + \",\" + cv_ctu_pc_met_g;\n\n    msg.payload = dataLine;\n\n    // Atualiza os valores anteriores e o tempo\n    previousData.dateTime = dateTime;\n    previousData.cv_ctu_pc_plast = cv_ctu_pc_plast;\n    previousData.cv_ctu_pc_met_p = cv_ctu_pc_met_p;\n    previousData.cv_ctu_pc_met_m = cv_ctu_pc_met_m;\n    previousData.cv_ctu_pc_met_g = cv_ctu_pc_met_g;\n\n    context.set('previousData', previousData);\n\n    // Retorna a mensagem para salvar o dado\n    return msg;\n} else {\n    // Não retorna nada se não houve mudanças\n    return null;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 420,
+        "wires": [
+            [
+                "switchNode"
+            ]
+        ]
+    },
+    {
+        "id": "f4b0920954d6ede6",
+        "type": "function",
+        "z": "ac3a54951f21f6e2",
+        "name": "sendDateTime",
+        "func": "msg.payload = Date.now();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 480,
+        "wires": [
+            [
+                "40cdf5213166e8c9"
+            ]
+        ]
+    },
+    {
+        "id": "40cdf5213166e8c9",
+        "type": "moment",
+        "z": "ac3a54951f21f6e2",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "msg",
+        "inTz": "America/Sao_Paulo",
+        "adjAmount": 0,
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "",
+        "locale": "pt-BR",
+        "output": "",
+        "outputType": "msg",
+        "outTz": "America/Sao_Paulo",
+        "x": 560,
+        "y": 480,
+        "wires": [
+            [
+                "220a8ea60e08eb28"
+            ]
+        ]
+    },
+    {
+        "id": "220a8ea60e08eb28",
+        "type": "function",
+        "z": "ac3a54951f21f6e2",
+        "name": "dateTime",
+        "func": "msg.topic = \"dateTime\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 480,
+        "wires": [
+            [
+                "d3995a0234c1a974"
+            ]
+        ]
+    },
+    {
+        "id": "d1baba72d3074bd5",
+        "type": "file",
+        "z": "ac3a54951f21f6e2",
+        "name": "",
+        "filename": "C:\\dados\\historico.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 1360,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "switchNode",
+        "type": "switch",
+        "z": "ac3a54951f21f6e2",
+        "name": "Filtrar null",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1160,
+        "y": 420,
+        "wires": [
+            [
+                "d1baba72d3074bd5"
+            ]
+        ]
+    },
+    {
+        "id": "b999f7076888ac6f",
+        "type": "function",
+        "z": "ac3a54951f21f6e2",
+        "name": "function 2",
+        "func": "msg.payload = \"dateTime,cv_ctu_pc_plast,cv_ctu_pc_met_p,cv_ctu_pc_met_m,cv_ctu_pc_met_g\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 240,
+        "wires": [
+            [
+                "d1baba72d3074bd5"
+            ]
+        ]
+    },
+    {
+        "id": "9b03453b9c951e97",
+        "type": "inject",
+        "z": "ac3a54951f21f6e2",
+        "name": "Criar Cabeçalho",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "b999f7076888ac6f"
+            ]
+        ]
+    },
+    {
+        "id": "0298100053feb368",
+        "type": "OpcUa-Endpoint",
+        "endpoint": "opc.tcp://10.110.8.181:4840",
+        "secpol": "None",
+        "secmode": "None",
+        "none": true,
+        "login": false,
+        "usercert": false,
+        "usercertificate": "",
+        "userprivatekey": ""
+    }
+]
