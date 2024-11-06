@@ -1,7 +1,9 @@
 # Projeto em Java, Script SQL, JSON Node_RED e arquivo CSV 
  
 Arquivos utlizados para prova de conceito em abordagem de integração CLP
+  
 - Para testar o projeto utilize:
+ IDE TIA Portal 14 (Diagrama Ladder) 
  IDE InteliJ (Java)
  MySQL (banco)
 
