@@ -1,11 +1,11 @@
-# Projeto em Ladder, Java, Script MySQL, Node-RED e arquivo CSV 
+# Projeto em Ladder, Java, Script MySQL, Node-RED, arquivo CSV e Power BI
  
 Arquivos utlizados para prova de conceito em abordagem de integração CLP
   
 - Para testar o projeto utilize:
  IDE TIA Portal 14 (Diagrama Ladder) 
  IDE InteliJ (Java)
- MySQL (banco)
+ MySQL (banco de dados)
  Power Bi
 
 Feito isso adicione o arquio .CSV na pasta proj_Pesquisa
