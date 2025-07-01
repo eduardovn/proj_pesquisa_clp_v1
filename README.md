@@ -1,4 +1,4 @@
-# Projeto em Ladder, Java, Script SQL, Node-RED e arquivo CSV 
+# Projeto em Ladder, Java, Script MySQL, Node-RED e arquivo CSV 
  
 Arquivos utlizados para prova de conceito em abordagem de integração CLP
   
